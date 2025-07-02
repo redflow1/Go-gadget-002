@@ -1,0 +1,575 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RH Intelligence - Gestion des Employés et Documents</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .document-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+        }
+        .sidebar {
+            transition: all 0.3s ease;
+        }
+        .ai-summary {
+            background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+            border-left: 4px solid #38bdf8;
+        }
+        #preview-container {
+            min-height: 300px;
+            border: 2px dashed #cbd5e1;
+        }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <div class="flex h-screen overflow-hidden">
+        <!-- Sidebar -->
+        <div class="sidebar bg-white w-64 p-4 shadow-lg hidden md:block">
+            <div class="flex items-center justify-between mb-8">
+                <h1 class="text-xl font-bold text-sky-600">RH Intelligence</h1>
+                <i class="fas fa-bars text-gray-500 cursor-pointer"></i>
+            </div>
+            
+            <div class="mb-6">
+                <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/01a1300f-8102-4275-a0bd-a6700cac4d48.png" alt="Portrait professionnel d'un responsable RH souriant avec costume élégant dans un bureau moderne" class="rounded-full w-24 h-24 mx-auto border-4 border-sky-100 mb-2" />
+                <div class="text-center">
+                    <h3 class="font-medium">Admin RH</h3>
+                    <p class="text-sm text-gray-500">Responsable Ressources Humaines</p>
+                </div>
+            </div>
+            
+            <nav>
+                <ul class="space-y-2">
+                    <li>
+                        <a href="#" class="flex items-center p-2 rounded-lg bg-sky-50 text-sky-600">
+                            <i class="fas fa-home mr-3"></i>
+                            Tableau de bord
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#" class="flex items-center p-2 rounded-lg text-gray-700 hover:bg-gray-100">
+                            <i class="fas fa-users mr-3"></i>
+                            Employés
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#" class="flex items-center p-2 rounded-lg text-gray-700 hover:bg-gray-100">
+                            <i class="fas fa-file-alt mr-3"></i>
+                            Documents
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#" class="flex items-center p-2 rounded-lg text-gray-700 hover:bg-gray-100">
+                            <i class="fas fa-chart-line mr-3"></i>
+                            Performances
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#" class="flex items-center p-2 rounded-lg text-gray-700 hover:bg-gray-100">
+                            <i class="fas fa-robot mr-3"></i>
+                            IA RH
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#" class="flex items-center p-2 rounded-lg text-gray-700 hover:bg-gray-100">
+                            <i class="fas fa-cog mr-3"></i>
+                            Paramètres
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+            
+            <div class="mt-auto pt-4 border-t border-gray-200">
+                <button class="w-full bg-sky-600 hover:bg-sky-700 text-white py-2 px-4 rounded-lg flex items-center justify-center">
+                    <i class="fas fa-plus mr-2"></i>
+                    Nouveau rapport
+                </button>
+            </div>
+        </div>
+        
+        <!-- Main Content -->
+        <div class="flex-1 overflow-y-auto">
+            <!-- Header -->
+            <header class="bg-white shadow-sm p-4 flex items-center justify-between">
+                <div class="flex items-center">
+                    <button id="sidebar-toggle" class="mr-4 text-gray-500 md:hidden">
+                        <i class="fas fa-bars text-xl"></i>
+                    </button>
+                    <h2 class="text-xl font-semibold text-gray-800">Tableau de bord RH</h2>
+                </div>
+                
+                <div class="flex items-center space-x-4">
+                    <div class="relative">
+                        <i class="fas fa-bell text-gray-500 text-xl"></i>
+                        <span class="absolute -top-1 -right-1 bg-red-500 text-white text-xs w-4 h-4 flex items-center justify-center rounded-full">3</span>
+                    </div>
+                    <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/827eb10d-639c-4ca9-a273-1aab08c182d7.png" alt="Petite photo de profil du gestionnaire RH avec cadre rond" class="w-8 h-8 rounded-full" />
+                </div>
+            </header>
+            
+            <main class="p-6">
+                <!-- Stats Cards -->
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+                    <div class="bg-white p-6 rounded-xl shadow">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <p class="text-gray-500">Employés</p>
+                                <h3 class="text-2xl font-bold mt-1">247</h3>
+                                <p class="text-sm text-green-500 mt-1">+5% vs mois dernier</p>
+                            </div>
+                            <div class="bg-blue-100 p-3 rounded-full">
+                                <i class="fas fa-users text-blue-600 text-xl"></i>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="bg-white p-6 rounded-xl shadow">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <p class="text-gray-500">Documents</p>
+                                <h3 class="text-2xl font-bold mt-1">1,024</h3>
+                                <p class="text-sm text-blue-500 mt-1">+12 nouveaux</p>
+                            </div>
+                            <div class="bg-purple-100 p-3 rounded-full">
+                                <i class="fas fa-file-alt text-purple-600 text-xl"></i>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="bg-white p-6 rounded-xl shadow">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <p class="text-gray-500">Évaluations</p>
+                                <h3 class="text-2xl font-bold mt-1">83%</h3>
+                                <p class="text-sm text-orange-500 mt-1">En progression</p>
+                            </div>
+                            <div class="bg-green-100 p-3 rounded-full">
+                                <i class="fas fa-chart-line text-green-600 text-xl"></i>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="bg-white p-6 rounded-xl shadow">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <p class="text-gray-500">Analyse IA</p>
+                                <h3 class="text-2xl font-bold mt-1">94%</h3>
+                                <p class="text-sm text-amber-500 mt-1">Précision</p>
+                            </div>
+                            <div class="bg-amber-100 p-3 rounded-full">
+                                <i class="fas fa-robot text-amber-600 text-xl"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Document Upload and AI Section -->
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
+                    <!-- Upload Area -->
+                    <div class="bg-white p-6 rounded-xl shadow lg:col-span-2">
+                        <h3 class="text-lg font-semibold mb-4">Importation de documents</h3>
+                        <div id="drop-zone" class="border-2 border-dashed border-gray-300 rounded-lg p-8 text-center">
+                            <i class="fas fa-cloud-upload-alt text-4xl text-gray-400 mb-4"></i>
+                            <h4 class="font-medium mb-2">Glissez-déposez vos fichiers ici</h4>
+                            <p class="text-gray-500 text-sm mb-4">Formats supportés: PDF, DOCX, XLSX, PPTX</p>
+                            <input type="file" id="file-upload" accept=".pdf,.docx,.xlsx,.pptx" class="hidden" multiple>
+                            <button onclick="document.getElementById('file-upload').click()" class="bg-sky-600 hover:bg-sky-700 text-white py-2 px-6 rounded-lg">
+                                Parcourir fichiers
+                            </button>
+                        </div>
+                        
+                        <div class="mt-6 grid grid-cols-2 md:grid-cols-3 gap-4">
+                            <div class="document-card bg-white border border-gray-200 rounded-lg p-4 transition-all cursor-pointer">
+                                <i class="fas fa-file-pdf text-red-500 text-2xl mb-2"></i>
+                                <h5 class="font-medium text-sm truncate">Rapport_annuel.pdf</h5>
+                                <p class="text-gray-500 text-xs">PDF - 2.4MB</p>
+                            </div>
+                            <div class="document-card bg-white border border-gray-200 rounded-lg p-4 transition-all cursor-pointer">
+                                <i class="fas fa-file-excel text-green-500 text-2xl mb-2"></i>
+                                <h5 class="font-medium text-sm truncate">KPI_Q2.xlsx</h5>
+                                <p class="text-gray-500 text-xs">Excel - 3.1MB</p>
+                            </div>
+                            <div class="document-card bg-white border border-gray-200 rounded-lg p-4 transition-all cursor-pointer">
+                                <i class="fas fa-file-word text-blue-500 text-2xl mb-2"></i>
+                                <h5 class="font-medium text-sm truncate">Contrat_standard.docx</h5>
+                                <p class="text-gray-500 text-xs">Word - 1.2MB</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- AI Summary -->
+                    <div class="bg-white p-6 rounded-xl shadow">
+                        <h3 class="text-lg font-semibold mb-4">Résumé par IA</h3>
+                        <div id="preview-container" class="ai-summary rounded-lg p-4 mb-4">
+                            <p class="text-gray-700 text-sm">Aucun document sélectionné pour analyse. Veuillez sélectionner un fichier pour générer un résumé intelligent.</p>
+                        </div>
+                        
+                        <div class="space-y-4">
+                            <button class="w-full bg-sky-600 hover:bg-sky-700 text-white py-2 px-4 rounded-lg flex items-center justify-center">
+                                <i class="fas fa-robot mr-2"></i>
+                                Générer un résumé
+                            </button>
+                            
+                            <button class="w-full bg-white border border-gray-300 hover:bg-gray-50 text-gray-700 py-2 px-4 rounded-lg flex items-center justify-center">
+                                <i class="fas fa-language mr-2"></i>
+                                Traduire
+                            </button>
+                            
+                            <button class="w-full bg-white border border-gray-300 hover:bg-gray-50 text-gray-700 py-2 px-4 rounded-lg flex items-center justify-center">
+                                <i class="fas fa-key mr-2"></i>
+                                Extraire mots-clés
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Employee List -->
+                <div class="bg-white p-6 rounded-xl shadow mb-8">
+                    <div class="flex justify-between items-center mb-6">
+                        <h3 class="text-lg font-semibold">Liste des employés</h3>
+                        
+                        <div class="flex space-x-2">
+                            <button class="bg-white border border-gray-300 hover:bg-gray-50 text-gray-700 py-2 px-4 rounded-lg flex items-center">
+                                <i class="fas fa-filter mr-2"></i>
+                                Filtres
+                            </button>
+                            <button class="bg-sky-600 hover:bg-sky-700 text-white py-2 px-4 rounded-lg flex items-center">
+                                <i class="fas fa-plus mr-2"></i>
+                                Ajouter
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="overflow-x-auto">
+                        <table class="min-w-full divide-y divide-gray-200">
+                            <thead>
+                                <tr>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Nom</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Poste</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Département</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Statut</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody class="bg-white divide-y divide-gray-200">
+                                <tr>
+                                    <td class="px-6 py-4 whitespace-nowrap">
+                                        <div class="flex items-center">
+                                            <div class="flex-shrink-0 h-10 w-10">
+                                                <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/5e25bd4f-0b03-4f93-a31a-b725c797303c.png" alt="Photo de profil d'un employé masculin souriant avec chemise bleue dans un bureau" class="h-10 w-10 rounded-full">
+                                            </div>
+                                            <div class="ml-4">
+                                                <div class="text-sm font-medium text-gray-900">Jean Dupont</div>
+                                                <div class="text-sm text-gray-500">jean.dupont@example.com</div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap">
+                                        <div class="text-sm text-gray-900">Chef de projet</div>
+                                        <div class="text-sm text-gray-500">IT</div>
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap">
+                                        <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
+                                            CDI
+                                        </span>
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                        <div class="flex items-center">
+                                            <div class="h-2 w-2 rounded-full bg-green-500 mr-2"></div>
+                                            Actif
+                                        </div>
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                                        <a href="#" class="text-sky-600 hover:text-sky-900 mr-3">Voir</a>
+                                        <a href="#" class="text-gray-600 hover:text-gray-900">Éditer</a>
+                                    </td>
+                                </tr>
+                                
+                                <tr>
+                                    <td class="px-6 py-4 whitespace-nowrap">
+                                        <div class="flex items-center">
+                                            <div class="flex-shrink-0 h-10 w-10">
+                                                <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/d8678237-8b8e-4d0e-b8a6-f9d8a6550a02.png" alt="Photo de profil d'une employée féminine professionnelle avec chemise blanche et veste" class="h-10 w-10 rounded-full">
+                                            </div>
+                                            <div class="ml-4">
+                                                <div class="text-sm font-medium text-gray-900">Marie Lambert</div>
+                                                <div class="text-sm text-gray-500">marie.lambert@example.com</div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap">
+                                        <div class="text-sm text-gray-900">Responsable Marketing</div>
+                                        <div class="text-sm text-gray-500">Marketing</div>
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap">
+                                        <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
+                                            CDI
+                                        </span>
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                        <div class="flex items-center">
+                                            <div class="h-2 w-2 rounded-full bg-green-500 mr-2"></div>
+                                            Actif
+                                        </div>
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                                        <a href="#" class="text-sky-600 hover:text-sky-900 mr-3">Voir</a>
+                                        <a href="#" class="text-gray-600 hover:text-gray-900">Éditer</a>
+                                    </td>
+                                </tr>
+                                
+                                <tr>
+                                    <td class="px-6 py-4 whitespace-nowrap">
+                                        <div class="flex items-center">
+                                            <div class="flex-shrink-0 h-10 w-10">
+                                                <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/306b1f7e-5096-4b4c-ab3c-4ea5a6b7e749.png" alt="Portrait d'un jeune employé avec chemise informelle et coupe de cheveux moderne" class="h-10 w-10 rounded-full">
+                                            </div>
+                                            <div class="ml-4">
+                                                <div class="text-sm font-medium text-gray-900">Thomas Moreau</div>
+                                                <div class="text-sm text-gray-500">thomas.moreau@example.com</div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap">
+                                        <div class="text-sm text-gray-900">Développeur</div>
+                                        <div class="text-sm text-gray-500">IT</div>
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap">
+                                        <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-yellow-100 text-yellow-800">
+                                            Stage
+                                        </span>
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                        <div class="flex items-center">
+                                            <div class="h-2 w-2 rounded-full bg-green-500 mr-2"></div>
+                                            Actif
+                                        </div>
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                                        <a href="#" class="text-sky-600 hover:text-sky-900 mr-3">Voir</a>
+                                        <a href="#" class="text-gray-600 hover:text-gray-900">Éditer</a>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                
+                <!-- KPI Visualization -->
+                <div class="bg-white p-6 rounded-xl shadow">
+                    <h3 class="text-lg font-semibold mb-6">Analyse des performances</h3>
+                    
+                    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
+                        <div class="bg-white border border-gray-200 rounded-lg p-4">
+                            <h4 class="text-sm font-medium text-gray-500 mb-2">Satisfaction employés</h4>
+                            <div class="flex items-end">
+                                <h3 class="text-2xl font-bold mr-2">72%</h3>
+                                <p class="text-green-500 text-sm">↑ 2%</p>
+                            </div>
+                            <div class="h-3 bg-gray-200 rounded-full mt-3 overflow-hidden">
+                                <div class="h-full bg-green-500 rounded-full" style="width: 72%"></div>
+                            </div>
+                        </div>
+                        
+                        <div class="bg-white border border-gray-200 rounded-lg p-4">
+                            <h4 class="text-sm font-medium text-gray-500 mb-2">Délai de recrutement</h4>
+                            <div class="flex items-end">
+                                <h3 class="text-2xl font-bold mr-2">28j</h3>
+                                <p class="text-red-500 text-sm">↓ 5j</p>
+                            </div>
+                            <div class="h-3 bg-gray-200 rounded-full mt-3 overflow-hidden">
+                                <div class="h-full bg-blue-500 rounded-full" style="width: 65%"></div>
+                            </div>
+                        </div>
+                        
+                        <div class="bg-white border border-gray-200 rounded-lg p-4">
+                            <h4 class="text-sm font-medium text-gray-500 mb-2">Rotation du personnel</h4>
+                            <div class="flex items-end">
+                                <h3 class="text-2xl font-bold mr-2">8.5%</h3>
+                                <p class="text-green-500 text-sm">↓ 1.2%</p>
+                            </div>
+                            <div class="h-3 bg-gray-200 rounded-full mt-3 overflow-hidden">
+                                <div class="h-full bg-purple-500 rounded-full" style="width: 42%"></div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="bg-gray-50 p-4 rounded-lg">
+                        <div class="flex items-center justify-between mb-4">
+                            <h4 class="font-medium">Tendances trimestrielles</h4>
+                            <select class="border border-gray-300 rounded-md px-3 py-1 text-sm">
+                                <option>12 derniers mois</option>
+                                <option>6 derniers mois</option>
+                                <option>3 derniers mois</option>
+                            </select>
+                        </div>
+                        
+                        <div id="chart-container" class="h-64">
+                            <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/480acbd5-a2d3-4d41-8d3d-aa3704970235.png" alt="Graphique en courbes montrant les tendances RH trimestrielles avec différentes métriques KPI" class="w-full h-full object-contain" />
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <script>
+        // Employee data
+        const employees = [
+            {
+                id: 1,
+                name: "Jean Dupont",
+                email: "jean.dupont@example.com",
+                position: "Chef de projet",
+                department: "IT",
+                contract: "CDI",
+                status: "Actif",
+                image: "https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/9438f97b-e627-4fc5-b90a-92481d1732db.png"
+            },
+            {
+                id: 2,
+                name: "Marie Lambert",
+                email: "marie.lambert@example.com",
+                position: "Responsable Marketing",
+                department: "Marketing",
+                contract: "CDI",
+                status: "Actif",
+                image: "https://placehold.co/40x40"
+            },
+            {
+                id: 3,
+                name: "Thomas Moreau",
+                email: "thomas.moreau@example.com",
+                position: "Développeur",
+                department: "IT",
+                contract: "Stage",
+                status: "Actif",
+                image: "https://placehold.co/40x40"
+            }
+        ];
+
+        // Toggle sidebar on mobile
+        document.getElementById('sidebar-toggle').addEventListener('click', function() {
+            const sidebar = document.querySelector('.sidebar');
+            sidebar.classList.toggle('hidden');
+        });
+
+        // Simulate file upload and AI analysis
+        document.querySelectorAll('.document-card').forEach(card => {
+            card.addEventListener('click', function() {
+                // Remove active state from all cards
+                document.querySelectorAll('.document-card').forEach(c => {
+                    c.classList.remove('border-sky-500', 'bg-sky-50');
+                    c.classList.add('border-gray-200');
+                });
+                
+                // Add active state to clicked card
+                this.classList.add('border-sky-500', 'bg-sky-50');
+                this.classList.remove('border-gray-200');
+                
+                // Display analysis message
+                const fileName = this.querySelector('h5').textContent;
+                document.getElementById('preview-container').innerHTML = `
+                    <p class="font-medium mb-2">${fileName} sélectionné pour analyse</p>
+                    <p class="text-sm text-gray-700">Cliquez sur "Générer un résumé" pour obtenir une analyse automatique du document par notre IA spécialisée.</p>
+                `;
+            });
+        });
+
+        // Simulate AI analysis
+        document.querySelectorAll('button')[5].addEventListener('click', function() {
+            const preview = document.getElementById('preview-container');
+            if (preview.textContent.includes('sélectionné')) {
+                preview.innerHTML = `
+                    <h4 class="font-medium mb-3">Résumé par IA</h4>
+                    <ul class="text-sm text-gray-700 space-y-2">
+                        <li>• Document analysé avec une confiance de 94%</li>
+                        <li>• Principaux thèmes: recrutement, performance, analyse des coûts</li>
+                        <li>• 5 points clés identifiés</li>
+                        <li>• Recommandations IA: revoir la politique de télétravail</li>
+                    </ul>
+                    <div class="mt-4 pt-3 border-t border-gray-200">
+                        <p class="text-xs text-gray-500">Analysé le ${new Date().toLocaleDateString()} - Modèle RHv2.1</p>
+                    </div>
+                `;
+            }
+        });
+
+        // File upload handling
+        const fileUpload = document.getElementById('file-upload');
+        const dropZone = document.getElementById('drop-zone');
+        const documentsList = document.querySelector('.grid.grid-cols-2.md\\:grid-cols-3.gap-4');
+
+        fileUpload.addEventListener('change', handleFiles);
+        
+        dropZone.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            dropZone.classList.add('border-blue-500', 'bg-blue-50');
+        });
+
+        dropZone.addEventListener('dragleave', () => {
+            dropZone.classList.remove('border-blue-500', 'bg-blue-50');
+        });
+
+        dropZone.addEventListener('drop', (e) => {
+            e.preventDefault();
+            dropZone.classList.remove('border-blue-500', 'bg-blue-50');
+            handleFiles(e.dataTransfer.files);
+        });
+
+        function handleFiles(files) {
+            Array.from(files).forEach(file => {
+                if (file.type.match(/(pdf|msword|vnd.ms-excel|vnd.openxmlformats-officedocument)/)) {
+                    addDocumentCard(file);
+                }
+            });
+        }
+
+        function addDocumentCard(file) {
+            const docCard = document.createElement('div');
+            docCard.className = 'document-card bg-white border border-gray-200 rounded-lg p-4 transition-all cursor-pointer';
+            docCard.innerHTML = `
+                <i class="fas fa-file-${getFileIcon(file.name)} text-${getFileColor(file.name)}-500 text-2xl mb-2"></i>
+                <h5 class="font-medium text-sm truncate">${file.name}</h5>
+                <p class="text-gray-500 text-xs">${file.type.split('/').pop().toUpperCase()} - ${formatFileSize(file.size)}</p>
+            `;
+            documentsList.appendChild(docCard);
+        }
+
+        function getFileIcon(filename) {
+            if (filename.endsWith('.pdf')) return 'pdf';
+            if (filename.endsWith('.docx')) return 'word';
+            if (filename.endsWith('.xlsx')) return 'excel';
+            return 'alt';
+        }
+
+        function getFileColor(filename) {
+            if (filename.endsWith('.pdf')) return 'red';
+            if (filename.endsWith('.docx')) return 'blue';
+            if (filename.endsWith('.xlsx')) return 'green';
+            return 'gray';
+        }
+
+        function formatFileSize(bytes) {
+            if (bytes === 0) return '0 Bytes';
+            const k = 1024;
+            const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+            const i = Math.floor(Math.log(bytes) / Math.log(k));
+            return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+        }
+
+        // Responsive sidebar handling
+        window.addEventListener('resize', function() {
+            const sidebar = document.querySelector('.sidebar');
+            if (window.innerWidth < 768) {
+                sidebar.classList.add('hidden');
+            } else {
+                sidebar.classList.remove('hidden');
+            }
+        });
+    </script>
+</body>
+</html>
